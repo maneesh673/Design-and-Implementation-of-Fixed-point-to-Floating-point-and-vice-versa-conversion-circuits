@@ -1,0 +1,37 @@
+ #Floating point to Fixed point converter code
+‘ t i m e s c a l e 1 ns / 1 ps
+module f l o a t t o f i x e d ( a , b ) ;
+parameter m=23,n=8;
+i n pu t [m+n : 0 ] a ;
+output [m+n : 0 ] b ;
+wi r e [ n−1:0] exp ;
+wi r e [m+n : 0 ] dummya, dummyb;
+a s s i g n exp=a [m+n−1:m] ;
+a s s i g n dummya={{n{1 ’ b0 } } ,1 ’ b1 , a [m−1: 0] } ;
+a s s i g n dummyb=(exp >(2∗∗(n−1)−1))?dummya<<(exp −(2∗∗(n−1) −1)):dummya>>((2∗∗(n−1a s s i g n b=a [m+n ] ? { a [m+n ] , ˜ dummyb[m+n −1: 0] } : { a [m+n ] , dummyb[m+n −1: 0] } ;
+endmodule
+
+Test bench
+module tb ( ) ;
+r eg [ 3 1 : 0 ] a ;
+wi r e [ 3 1 : 0 ] b ;
+f l o a t t o f i x e d f u t ( a , b ) ;
+i n i t i a l
+b egi n
+a=32’ b01000001001010000000000000000000 ;
+#100
+a=32’ b11000011011110111010000000000000 ;
+#100
+a=32’ b01000000001000000000000000000000 ;
+#100
+a=32’ b11000010010100100000000000000000 ;
+#100
+a=32’ b01000010111110110100000000000000 ;
+#100
+a=32’ b01000010110010011000011110101110 ;
+#100
+a=32’ b11000011011110111010000000000000 ;
+#100
+$ f i n i s h ;
+end
+endmodule
