@@ -1,0 +1,57 @@
+//Fixed to Floating point Converter Code
+‘ t i m e s c a l e 1 ns / 1 ps
+module f i x e d t o f l o a t i n g ( a , b ) ;
+parameter d=23,m=8;
+i n pu t [m+d : 0 ] a ;
+output [m+d : 0 ] b ;
+wi r e [m+d : 0 ] ax ;
+r eg [m+d : 0 ] temp1 ;
+i n t e g e r i ;
+r eg [m−1:0] count ;
+wi r e [ d−1:0]mant ;
+wi r e [m−1:0] exp ;
+a s s i g n ax=a [m+d ] ? ( ˜ a ) : a ;
+always @( ∗ )
+b egi n
+temp1=ax ;
+count =0;
+f o r ( i =(m+d ) ; i >=0; i=i −1)
+i f ( temp1 [m+d]==0)
+b egi n
+count=count +1;
+temp1=temp1<<1;
+end
+e l s e
+b egi n
+count=count ;
+temp1=temp1 ;
+end
+end
+a s s i g n mant=temp1 [ (m+d−1):m] ;
+a s s i g n exp =(2∗∗(m−1)−1)+(m−count ) ;
+a s s i g n b={a [m+d ] , exp , mant } ;
+9
+endmodule
+// Test bench
+‘ t i m e s c a l e 1 ns / 1 ps
+module f i x e d t o f l o a t ( ) ;
+r eg [ 3 1 : 0 ] a ;
+wi r e [ 3 1 : 0 ] b ;
+f i x e d t o f l o a t i n g f u t 1 ( a , b ) ;
+i n i t i a l
+b egi n
+a=32’ b0 00001010 10000000000000000000000 ;
+#100
+a=32’ b0 00011010 10000000000000000000000 ;
+#100
+a=32’ b1 00011010 10000000000000000000000 ;
+#100
+a=32’ b00000110001000000000000000000000 ; //12.25
+#100
+a = 32 ’ b11111010101011001100110011010000 ; // −10.65
+#100
+a = 32 ’ b00001111001110000101000111101000 ; // 30.44
+#100
+$ f i n i s h ;
+end
+endmodule
